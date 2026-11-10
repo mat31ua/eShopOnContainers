@@ -1,0 +1,178 @@
+{
+  "info": {
+    "name": "eShopForMS - Seminarios 1 y 2 (vinilos)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "catalogUrl",
+      "value": "http://localhost"
+    },
+    {
+      "key": "cartUrl",
+      "value": "http://localhost:81"
+    }
+  ],
+  "item": [
+    {
+      "name": "Seminario 2 - en este orden",
+      "item": [
+        {
+          "name": "1. POST Catalog.API - crear producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{catalogUrl}}/api/CatalogItems"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Abbey Road - The Beatles (LP)\",\n  \"description\": \"Edición remasterizada en vinilo de 180 g\",\n  \"price\": 24.9,\n  \"catalogType\": \"Rock\",\n  \"catalogBrand\": \"Apple Records\",\n  \"availableStock\": 100,\n  \"restockThreshold\": 10,\n  \"maxStockThreshold\": 100,\n  \"onReorder\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "2. POST ShoppingCart.API - añadir al carrito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{cartUrl}}/api/ShoppingCart/AddProductToShoppingCart"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"cliente.vinilos\",\n  \"firstName\": \"Ana\",\n  \"lastName\": \"García\",\n  \"emailAddress\": \"ana.garcia@example.com\",\n  \"addressLine\": \"Calle Mayor 1, Albacete\",\n  \"productDTO\": {\n    \"name\": \"Abbey Road - The Beatles (LP)\",\n    \"price\": 24.9,\n    \"quantity\": 1\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "3. PUT Catalog.API - modificar precio",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{catalogUrl}}/api/CatalogItems"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Abbey Road - The Beatles (LP)\",\n  \"description\": \"Edición remasterizada en vinilo de 180 g\",\n  \"price\": 32.5,\n  \"catalogType\": \"Rock\",\n  \"catalogBrand\": \"Apple Records\",\n  \"availableStock\": 100,\n  \"restockThreshold\": 10,\n  \"maxStockThreshold\": 100,\n  \"onReorder\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "4. GET ShoppingCart.API - comprobar carrito",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{cartUrl}}/api/ShoppingCart?UserName=cliente.vinilos"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Seminario 1 (opcional, también se puede hacer en Swagger)",
+      "item": [
+        {
+          "name": "POST producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{catalogUrl}}/api/CatalogItems"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kind of Blue - Miles Davis (LP)\",\n  \"description\": \"Edición en vinilo de 180 g\",\n  \"price\": 29.9,\n  \"catalogType\": \"Jazz\",\n  \"catalogBrand\": \"Columbia\",\n  \"availableStock\": 25,\n  \"restockThreshold\": 5,\n  \"maxStockThreshold\": 50,\n  \"onReorder\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET catálogo completo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{catalogUrl}}/api/CatalogItems?pageSize=10&pageIndex=0"
+            }
+          }
+        },
+        {
+          "name": "GET producto por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{catalogUrl}}/api/CatalogItems/1"
+            }
+          }
+        },
+        {
+          "name": "PUT cambiar el nombre (por id)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{catalogUrl}}/api/CatalogItems/1"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kind of Blue (Miles Davis) - LP\",\n  \"description\": \"Edición en vinilo de 180 g\",\n  \"price\": 29.9,\n  \"catalogType\": \"Jazz\",\n  \"catalogBrand\": \"Columbia\",\n  \"availableStock\": 25,\n  \"restockThreshold\": 5,\n  \"maxStockThreshold\": 50,\n  \"onReorder\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

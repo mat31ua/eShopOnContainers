@@ -1,6 +1,57 @@
-@Catalog.API_HostAddress = http://localhost:5186
+@Catalog.API_HostAddress = http://localhost
 
-GET {{Catalog.API_HostAddress}}/weatherforecast/
+### GET catálogo completo
+GET {{Catalog.API_HostAddress}}/api/CatalogItems?pageSize=10&pageIndex=0
 Accept: application/json
 
-###
+### POST nuevo producto
+POST {{Catalog.API_HostAddress}}/api/CatalogItems
+Content-Type: application/json
+
+{
+  "name": "Kind of Blue - Miles Davis (LP)",
+  "description": "Edición en vinilo de 180 g",
+  "price": 29.9,
+  "catalogType": "Jazz",
+  "catalogBrand": "Columbia",
+  "availableStock": 25,
+  "restockThreshold": 5,
+  "maxStockThreshold": 50,
+  "onReorder": false
+}
+
+### GET producto por id
+GET {{Catalog.API_HostAddress}}/api/CatalogItems/1
+Accept: application/json
+
+### PUT cambiar el nombre del producto (por id)
+PUT {{Catalog.API_HostAddress}}/api/CatalogItems/1
+Content-Type: application/json
+
+{
+  "name": "Kind of Blue (Miles Davis) - LP",
+  "description": "Edición en vinilo de 180 g",
+  "price": 29.9,
+  "catalogType": "Jazz",
+  "catalogBrand": "Columbia",
+  "availableStock": 25,
+  "restockThreshold": 5,
+  "maxStockThreshold": 50,
+  "onReorder": false
+}
+
+### PUT modificar el precio (por nombre) - publica el evento en RabbitMQ
+PUT {{Catalog.API_HostAddress}}/api/CatalogItems
+Content-Type: application/json
+
+{
+  "name": "Abbey Road - The Beatles (LP)",
+  "description": "Edición remasterizada en vinilo de 180 g",
+  "price": 32.5,
+  "catalogType": "Rock",
+  "catalogBrand": "Apple Records",
+  "availableStock": 100,
+  "restockThreshold": 10,
+  "maxStockThreshold": 100,
+  "onReorder": false
+}

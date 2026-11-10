@@ -1,0 +1,89 @@
+services:
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+
+    build:
+      context: .
+      dockerfile: src/Services/Catalog.API/Dockerfile
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      DB2USE: DockerSQLServer
+
+      ConnectionStrings__SQLServerDockerConnection: >-
+        Server=sqldata,1433;Initial Catalog=Microsoft.eShopOnContainers.Services.CatalogDb;User ID=sa;Password=Pa55w0rd2021;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;MultipleActiveResultSets=True
+
+    ports:
+      - "80:8080"
+
+    depends_on:
+      sqldata:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+  shoppingcart.api:
+    container_name: shoppingcart.api
+    image: eanarion/eshop:version3.0
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8081"
+      ASPNETCORE_DB2USE: DockerSQL
+      DB2USE: DockerSQL
+
+      ConnectionStrings__DefaultConnection: >-
+        Server=sqldata,1433;Initial Catalog=Microsoft.eShopOnContainers.Services.ShoppingCartDb;User ID=sa;Password=Pa55w0rd2021;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;MultipleActiveResultSets=True
+
+      ConnectionStrings__SQLServerDockerConnection: >-
+        Server=sqldata,1433;Initial Catalog=Microsoft.eShopOnContainers.Services.ShoppingCartDb;User ID=sa;Password=Pa55w0rd2021;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;MultipleActiveResultSets=True
+
+    ports:
+      - "81:8081"
+
+    depends_on:
+      sqldata:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+  sqldata:
+    image: mcr.microsoft.com/mssql/server:2019-CU13-ubuntu-20.04
+
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Pa55w0rd2021"
+
+    ports:
+      - "1433:1433"
+
+    volumes:
+      - sqlserver:/var/opt/mssql
+
+    restart: unless-stopped
+
+  rabbitmq:
+    hostname: rabbitmq
+    container_name: rabbitmq
+    image: rabbitmq:management
+
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+    restart: unless-stopped
+
+volumes:
+  sqlserver:
